@@ -9,11 +9,10 @@ prev_file = video_file
 
 while True:
     current = os.popen('ls {}'.format(audio_path)).read()
-    print('\n\n\ncurrent:', current, '\nprev:', prev_file, '\nlen(current):', len(current))
-    time.sleep(2)
     if len(current) == 0:
         video_file = os.popen("ls {} | tail -n 2 | head -n 1".format(videos_path)).read()[:-1]
         if prev_file == video_file:
+            time.sleep(0.2)
             continue
         prev_file = video_file
         vid = mp.VideoFileClip(videos_path + video_file)

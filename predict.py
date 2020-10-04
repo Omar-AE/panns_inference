@@ -6,9 +6,10 @@ import librosa
 import panns_inference
 from panns_inference import AudioTagging, SoundEventDetection, labels
 import time
+import json
 
 
-def print_audio_tagging_result(clipwise_output, number_of_classes=10, classes_set={}, threshold=0.2):
+def get_audio_tagging_result(clipwise_output, number_of_classes=10, classes_set=set(), threshold=0.2):
     """Visualization of audio tagging result.
 
     Args:
@@ -19,8 +20,26 @@ def print_audio_tagging_result(clipwise_output, number_of_classes=10, classes_se
     # Print audio tagging top probabilities
     for k in range(number_of_classes):
         if np.array(labels)[sorted_indexes[k]] in classes_set and clipwise_output[sorted_indexes[k]] > threshold:
-            print('{}: {:.3f}'.format(np.array(labels)[sorted_indexes[k]], 
-                clipwise_output[sorted_indexes[k]]))
+            print('{}: {:.3f}'.format(np.array(labels)[sorted_indexes[k]], clipwise_output[sorted_indexes[k]]))
+            # yield '{}:{:.3f}'.format(np.array(labels)[sorted_indexes[k]], clipwise_output[sorted_indexes[k]])
+            yield '{}'.format(np.array(labels)[sorted_indexes[k]])
+
+
+def store_result(result=""):
+    with open('results.txt', 'r') as f:
+        prev = f.read().strip('\n').split('|')
+
+    # prev_classes = set(i.split(':')[0] for i in prev)
+    prev_classes = set(prev)
+    result = result.union(prev_classes)
+    
+    with open('results.txt', 'w') as f:
+        while True:
+            try:
+                f.write('|'.join(result).strip('|'))
+                break
+            except:
+                pass
 
 
 def plot_sound_event_detection_result(framewise_output):
@@ -57,9 +76,12 @@ if __name__ == '__main__':
     device = 'cpu' # 'cuda' | 'cpu'
     at = AudioTagging(checkpoint_path=None, device=device)
     audio_path = "/home/nvr/converted_audio_files/"
-    with open('sound_classes.txt', 'r') as f:
-        classes = set(f.read().strip('\n').split('|'))
+    with open('/opt/iotistic-mnvr/config/default.json', 'r') as f:
+        config = json.load(f)['SERParameters']
     
+    classes = set(config['enabledclasses'].split('|'))
+    threshold = config['threshold']
+
     while True:
         audio_files = os.listdir(audio_path)
         if not audio_files:
@@ -74,9 +96,8 @@ if __name__ == '__main__':
         print('------ Audio tagging ------')
         (clipwise_output, embedding) = at.inference(audio)
         """clipwise_output: (batch_size, classes_num), embedding: (batch_size, embedding_size)"""
-        print('test0')
-        print_audio_tagging_result(clipwise_output[0], 3, classes)
-        print('test1')
+        result = set(get_audio_tagging_result(clipwise_output[0], 10, classes, threshold))
+        store_result(result)
         # print('------ Sound event detection ------')
         # sed = SoundEventDetection(checkpoint_path=None, device=device)
         # framewise_output = sed.inference(audio)
@@ -85,4 +106,3 @@ if __name__ == '__main__':
         # plot_sound_event_detection_result(framewise_output[0])
 
         print('done file within ', time.time() - t0)
-
