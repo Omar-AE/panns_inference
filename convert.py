@@ -2,7 +2,7 @@ import moviepy.editor as mp
 import os
 import time
 
-videos_path = "/home/nvr/NVRstorage/Recordings/2/main/"
+videos_path = "/home/nvr/NVRstorage/Recordings/1/main/"
 audio_path = "/home/nvr/converted_audio_files/"
 video_file = ''
 prev_file = video_file

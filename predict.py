@@ -28,7 +28,7 @@ def get_audio_tagging_result(clipwise_output, number_of_classes=10, classes_set=
     
 
 def store_result(new_result={}):
-    with open('results.json', 'r') as f:
+    with open('/home/nvr/airesults/ser.json', 'r') as f:
         try:
             prev = json.load(f)
         except JSONDecodeError:
@@ -39,7 +39,7 @@ def store_result(new_result={}):
         for key, value in d.items():
             result[key].extend(value)
 
-    with open('results.json', 'w') as f:
+    with open('/home/nvr/airesults/ser.json', 'w') as f:
         json.dump(dict(result), f)
 
 
@@ -79,8 +79,7 @@ if __name__ == '__main__':
     audio_path = "/home/nvr/converted_audio_files/"
     with open('/opt/iotistic-mnvr/config/default.json', 'r') as f:
         config = json.load(f)['SERParameters']
-    
-    classes = set(config['enabledclasses'].split('|'))
+    classes = set(config['enabledclasses'])
     threshold = config['threshold']
 
     while True:
