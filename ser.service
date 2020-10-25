@@ -1,0 +1,12 @@
+[Unit]
+Description=SER
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=3
+User=nvr
+ExecStart=/home/nvr/panns_inference/ser.sh
+
+[Install]
+WantedBy=multi-user.target
