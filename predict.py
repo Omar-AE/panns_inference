@@ -1,6 +1,6 @@
 import moviepy.editor as mp
 import os
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 import librosa
 import panns_inference
@@ -42,7 +42,7 @@ def store_result(new_result={}):
     with open('/home/nvr/airesults/ser.json', 'w') as f:
         json.dump(dict(result), f)
 
-
+'''
 def plot_sound_event_detection_result(framewise_output):
     """Visualization of sound event detection result. 
 
@@ -69,7 +69,7 @@ def plot_sound_event_detection_result(framewise_output):
     plt.ylim(0, 1.)
     plt.savefig(out_fig_path)
     print('Save fig to {}'.format(out_fig_path))
-
+'''
 
 if __name__ == '__main__':
     """Example of using panns_inferece for audio tagging and sound evetn detection.
