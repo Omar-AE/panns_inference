@@ -23,7 +23,7 @@ def get_audio_tagging_result(clipwise_output, number_of_classes=10, classes_set=
     for k in range(number_of_classes):
         if np.array(labels)[sorted_indexes[k]] in classes_set and clipwise_output[sorted_indexes[k]] > threshold:
             print('{}: {:.3f}'.format(np.array(labels)[sorted_indexes[k]], clipwise_output[sorted_indexes[k]]))
-            result[np.array(labels)[sorted_indexes[k]]] = ['{:.3f}'.format(clipwise_output[sorted_indexes[k]])]
+            result[np.array(labels)[sorted_indexes[k]]] = [round(clipwise_output[sorted_indexes[k]], 2)]
     return result
     
 
