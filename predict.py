@@ -79,7 +79,7 @@ if __name__ == '__main__':
     audio_path = "/home/nvr/converted_audio_files/"
     with open('/opt/iotistic-mnvr/config/default.json', 'r') as f:
         config = json.load(f)['SERParameters']
-    classes = set(config['enabledclasses'])
+    classes = set(config['enabledclasses'].split('|'))
     threshold = config['threshold']
 
     while True:
