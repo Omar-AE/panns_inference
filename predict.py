@@ -25,7 +25,7 @@ def get_audio_tagging_result(clipwise_output, number_of_classes=10, classes_set=
             print('{}: {:.3f}'.format(np.array(labels)[sorted_indexes[k]], clipwise_output[sorted_indexes[k]]))
             result[np.array(labels)[sorted_indexes[k]]] = [round(clipwise_output[sorted_indexes[k]], 2)]
     return result
-    
+
 
 def store_result(new_result={}):
     with open('/home/nvr/airesults/ser.json', 'r') as f:
@@ -79,8 +79,8 @@ if __name__ == '__main__':
     audio_path = "/home/nvr/converted_audio_files/"
     with open('/opt/iotistic-mnvr/config/default.json', 'r') as f:
         config = json.load(f)['SERParameters']
-    classes = set(config['enabledclasses'].split('|'))
-    threshold = config['threshold']
+    classes = set(config['serenabledclasses'].split('|'))
+    threshold = config['serthreshold']
 
     while True:
         audio_files = os.listdir(audio_path)
